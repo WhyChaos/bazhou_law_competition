@@ -1,26 +1,26 @@
 from tools.basic_tools.get_legal_document import GetLegalDocument
-from tools.basic_tools.search_case_num_by_legal_document import SearchCaseNumByLegalDocument
+from tools.basic_tools.search_case_num import SearchCaseNum
 class LegalDocumentInfo:
     def __init__(self):
         self.tool_name = 'legal_document_info'
         self.get_legal_document = GetLegalDocument()
-        self.search_case_num_by_legal_document = SearchCaseNumByLegalDocument()
+        self.search_case_num_by_legal_document = SearchCaseNum()
 
     def get_glm_tool_dict(self) -> dict:
         return {
             "type": "function",
             "function": {
                 "name": self.tool_name,
-                "description": "查法律文书信息",
+                "description": "查法律文书信息。",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "key": {
-                            "description": "法律文书中的字段名：" + "，".join(self.get_legal_document.legal_document_key),
+                            "description": "法律文书中的字段名：" + "、".join(self.get_legal_document.legal_document_key) + '。',
                             "type": "string"
                         },
                         "value": {
-                            "description": "法律文书中的字段值",
+                            "description": "法律文书中的字段值。",
                             "type": "string"
                         },
                     },
@@ -29,7 +29,7 @@ class LegalDocumentInfo:
             }
         }
 
-    def get_legal_document_info_list(self, key: str, value: str) -> list:
+    def run(self, key: str, value: str) -> list:
         case_num_list = self.search_case_num_by_legal_document.search_case_num_by_legal_document(key=key, value=value)
         info_list = []
         if case_num_list:

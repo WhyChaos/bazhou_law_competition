@@ -1,7 +1,6 @@
 from zhipuai import ZhipuAI
 import json
 import os
-import local_tools
 from dotenv import load_dotenv
 
 from tools import tools_handler
@@ -10,12 +9,11 @@ from tools import tools_handler
 class Agent:
     def __init__(self):
         load_dotenv()
-
         api_key = os.getenv('glm_api_key')
         self.client = ZhipuAI(api_key=api_key)
-        self.tools = local_tools.tool_list
         self.model_type = 'glm-4'
         self.tools_handler = tools_handler.ToolsHandler()
+        self.tools = self.tools_handler.get_glm_tools_list()
 
     def run(self, question):
         messages = []
@@ -35,7 +33,7 @@ class Agent:
         while response.choices[0].message.tool_calls:
             tool_call = response.choices[0].message.tool_calls[0]
             args = tool_call.function.arguments
-            function_result = self.tools_handler.call_function(function_name=tool_call.function.name, args=args)
+            function_result = self.tools_handler.call_function(function_name=tool_call.function.name, **json.loads(args))
             messages.append({
                 "role": "tool",
                 "content": f"{json.dumps(function_result)}",

@@ -3,7 +3,6 @@ from tools.basic_tools.base import Base
 class GetCompanyInfo(Base):
     def __init__(self):
         super(GetCompanyInfo, self).__init__()
-        self.tool_name = 'get_company_info'
 
 
     def get_company_info(self, company_name: str) -> dict:

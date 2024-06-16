@@ -39,7 +39,7 @@ class Base(object):
             url = self.base_url + api
             headers = {
                 'Authorization': 'Bearer ' + self.token,
-                'Content-Type': 'application/json'  # 如果发送的是 JSON 数据
+                'Content-Type': 'application/json'
             }
             response = requests.post(url, headers=headers, json=data)
 
