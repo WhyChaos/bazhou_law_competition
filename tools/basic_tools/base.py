@@ -54,6 +54,9 @@ class Base(object):
             except Exception as e:
                 print(f'插入失败,api: {api}, error: {e}, data: {data}, resp_data: {resp_data}')
 
+        if isinstance(resp_data, str):
+            resp_data = None
+
         print(resp_data)
         return resp_data
 
