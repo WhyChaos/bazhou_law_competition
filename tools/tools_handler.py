@@ -1,6 +1,6 @@
-from tools.get_company_info import GetCompanyInfo
-from tools.search_company_name_by_info import SearchCompanyNameByInfo
-from tools.search_case_num_by_legal_document import SearchCaseNumByLegalDocument
+from tools.basic_tools.get_company_info import GetCompanyInfo
+from tools.basic_tools.search_company_name_by_info import SearchCompanyNameByInfo
+from tools.basic_tools.search_case_num_by_legal_document import SearchCaseNumByLegalDocument
 
 
 class ToolsHandler:

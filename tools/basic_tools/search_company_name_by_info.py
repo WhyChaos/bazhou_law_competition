@@ -1,4 +1,4 @@
-from tools.base import Base
+from tools.basic_tools.base import Base
 
 
 class SearchCompanyNameByInfo(Base):
