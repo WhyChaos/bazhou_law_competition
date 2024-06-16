@@ -13,7 +13,7 @@ class CompanyInfo:
             "type": "function",
             "function": {
                 "name": self.tool_name,
-                "description": "根据公司名称查公司信息，名称可以是全称、简称、英文。",
+                "description": "根据公司名称查公司信息，名称可以是全称、简称、英文，公司信息包括基本信息、注册信息、母公司。",
                 "parameters": {
                     "type": "object",
                     "properties": {

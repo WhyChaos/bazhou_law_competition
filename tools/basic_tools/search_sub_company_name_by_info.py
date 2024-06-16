@@ -8,7 +8,7 @@ class SearchSubCompanyNameByInfo(Base):
 
     def search_sub_company_name_by_info(self, key: str, value: str) -> list:
         data = self.post_request(api='search_company_name_by_sub_info', data={"key": key, "value": value})
-        if isinstance(data, dict):
+        if isinstance(data, dict) or data is None:
             data = [data]
 
         return data

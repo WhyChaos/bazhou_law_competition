@@ -26,9 +26,9 @@ class GetLegalDocument(Base):
             }
         }
 
-    def get_legal_document(self, case_num: str) -> list:
+    def get_legal_document(self, case_num: str) -> dict:
         data = self.post_request(api='get_legal_document', data={"case_num": case_num})
-        if isinstance(data, dict):
-            data = [data]
+        if data is None:
+            data = {}
 
         return data
