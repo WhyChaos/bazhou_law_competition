@@ -1,8 +1,10 @@
 from tools.basic_tools.base import Base
+from tools.basic_tools.search_company_name import SearchCompanyName
 
 class GetCompanyInfo(Base):
     def __init__(self):
         super(GetCompanyInfo, self).__init__()
+        self.search_company_name = SearchCompanyName()
 
 
     def get_company_info(self, company_name: str) -> dict:
@@ -27,6 +29,12 @@ class GetCompanyInfo(Base):
         data = self.get_company_info(company_name)
         data = data | self.get_company_register(company_name)
         data = data | self.get_sub_company_info(company_name)
+        return data
+
+    def get_company_info_and_register_and_sub_and_sub_list(self, company_name: str) -> dict:
+        data = self.get_company_info_and_register_and_sub(company_name)
+        sub_list = self.search_company_name.search_company_name_by_sub(key='关联上市公司全称', value=company_name)
+        data['旗下公司'] = [sub['公司名称'] for sub in sub_list]
         return data
 
     # def get_company_list_info_and_register(self, company_name_list: list) -> dict:
