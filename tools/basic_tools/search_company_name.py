@@ -32,9 +32,11 @@ class SearchCompanyName(Base):
         return data
 
     def search_company_name_by_info_and_register_and_sub(self, key: str, value: str) -> list:
-        data = self.search_company_name_by_info(key, value)
-        if data == []:
+        data = []
+        if key in self.info_key:
+            data = self.search_company_name_by_info(key, value)
+        if data == [] and key in self.register_key:
             data = self.search_company_name_by_register(key, value)
-        if data == []:
+        if data == [] and key in self.sub_key:
             data = self.search_company_name_by_sub(key, value)
         return data
