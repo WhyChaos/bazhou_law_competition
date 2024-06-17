@@ -34,6 +34,7 @@ class GetCompanyInfo(Base):
     def get_company_info_and_register_and_sub_and_sub_list(self, company_name: str) -> dict:
         data = self.get_company_info_and_register_and_sub(company_name)
         sub_list = self.search_company_name.search_company_name_by_sub(key='关联上市公司全称', value=company_name)
+        data['旗下公司数量'] = len(sub_list)
         data['旗下公司'] = [sub['公司名称'] for sub in sub_list]
         return data
 

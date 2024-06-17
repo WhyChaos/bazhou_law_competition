@@ -34,12 +34,17 @@ class CompanyInfo:
             }
         }
 
-    def run(self, key: str, value: str) -> list:
+    def run(self, key: str, value: str):
         info_list = []
         company_name_list = self.search_company_name_by_info.search_company_name_by_info_and_register_and_sub(key=key, value=value)
+        if isinstance(company_name_list, str):
+            return company_name_list
         for company_name_dict in company_name_list:
             info_list.append(self.get_company_info.get_company_info_and_register_and_sub_and_sub_list(company_name=company_name_dict['公司名称']))
-        return info_list
+        info = {}
+        info['公司数量'] = len(company_name_list)
+        info['公司信息'] = info_list
+        return info
 
     # def run_tmp(self, company_name_list: list) -> list:
     #     info_list = []

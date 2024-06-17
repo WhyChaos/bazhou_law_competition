@@ -29,11 +29,15 @@ class LegalDocumentInfo:
             }
         }
 
-    def run(self, key: str, value: str) -> list:
+    def run(self, key: str, value: str):
         case_num_list = self.search_case_num_by_legal_document.search_case_num_by_legal_document(key=key, value=value)
+        if isinstance(case_num_list, str):
+            return case_num_list
         info_list = []
         if case_num_list:
             for case_num_dict in case_num_list:
                 info_list.append(self.get_legal_document.get_legal_document(case_num=case_num_dict['案号']))
-
-        return info_list
+        info = {}
+        info['案件数量'] = len(case_num_list)
+        info['案件信息'] = info_list
+        return info

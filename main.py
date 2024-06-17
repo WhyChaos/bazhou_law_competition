@@ -30,6 +30,7 @@ def main():
     question_list = read_jsonl(question_file_path)
 
     for question_dict in question_list:
+        print(f"目前ID:",question_dict['id'])
         answer = agent.run(question=question_dict['question'])
         answer_dict = {'id':question_dict['id'], 'question':question_dict['question'], 'answer': answer}
         append_to_jsonl(submission_file_path, answer_dict)

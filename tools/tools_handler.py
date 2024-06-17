@@ -9,7 +9,8 @@ class ToolsHandler:
         self.tool_list = [company_info, legal_document_info]
 
     def get_glm_tools_list(self) -> list:
-        glm_tools_list = [tool.get_glm_tool_dict() for tool in self.tool_list]
+        glm_tools_list = []
+        # glm_tools_list = [tool.get_glm_tool_dict() for tool in self.tool_list]
         glm_tools_list.append({
             "type": "web_search",
             "web_search": {
@@ -21,7 +22,11 @@ class ToolsHandler:
         })
         return glm_tools_list
 
-    def call_function(self, function_name: str, args):
+    def call_function(self, function_name: str, args_dict: dict):
+        result = []
         for tool in self.tool_list:
             if function_name == tool.tool_name:
-                tool.run(args)
+                result = tool.run(**args_dict)
+                break
+
+        return result
