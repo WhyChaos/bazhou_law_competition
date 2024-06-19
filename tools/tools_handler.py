@@ -10,7 +10,7 @@ class ToolsHandler:
 
     def get_glm_tools_list(self) -> list:
         glm_tools_list = []
-        # glm_tools_list = [tool.get_glm_tool_dict() for tool in self.tool_list]
+        glm_tools_list = [tool.get_glm_tool_dict() for tool in self.tool_list]
         glm_tools_list.append({
             "type": "web_search",
             "web_search": {

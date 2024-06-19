@@ -18,14 +18,14 @@ class CompanyInfo:
                     "type": "object",
                     "properties": {
                         "key": {
-                            "description": "公司信息中的字段名：" + "、".join(
+                            "description": "公司信息中的字段名，从如下中选择：" + "、".join(
                                 self.search_company_name_by_info.info_key) + '、' + "、".join(
                                 self.search_company_name_by_info.register_key) + '、' + "、".join(
                                 self.search_company_name_by_info.sub_key) + '。',
                             "type": "string"
                         },
                         "value": {
-                            "description": "公司信息中的字段值。",
+                            "description": "公司信息中的对应的字段值。",
                             "type": "string"
                         },
                     },

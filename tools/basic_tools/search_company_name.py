@@ -51,5 +51,5 @@ class SearchCompanyName(Base):
             if data == [] and key in self.sub_key:
                 data = self.search_company_name_by_sub(key, value)
         if data == []:
-            return f'字段名或字段值提供错误，请根据用户的内容中找出正确的字段名或字段值。'
+            return f'字段名或字段值提供错误，请根据用户的内容中找出正确的字段名和字段值。'
         return data
