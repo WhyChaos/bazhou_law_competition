@@ -28,7 +28,16 @@ class GetCompanyInfo(Base):
     def get_company_info_and_register_and_sub(self, company_name: str) -> dict:
         data = self.get_company_info(company_name)
         data = data | self.get_company_register(company_name)
-        data = data | self.get_sub_company_info(company_name)
+        sub_company_info = self.get_sub_company_info(company_name)
+        if sub_company_info:
+            data['父公司'] = {
+                '关联上市公司股票代码': sub_company_info['关联上市公司股票代码'],
+                '关联上市公司股票简称': sub_company_info['关联上市公司股票简称'],
+                '关联上市公司全称': sub_company_info['关联上市公司全称'],
+                '上市公司关系': sub_company_info['上市公司关系'],
+                '上市公司参股比例': sub_company_info['上市公司参股比例'],
+                '上市公司投资金额': sub_company_info['上市公司投资金额'],
+            }
         return data
 
     def get_company_info_and_register_and_sub_and_sub_list(self, company_name: str) -> dict:

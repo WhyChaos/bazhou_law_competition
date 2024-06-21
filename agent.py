@@ -19,17 +19,41 @@ class Agent:
         self.law_conn = sqlite3.connect('law.db')
         self.law_glm_run_table_name = 'law_glm_run_table'
 
-    def run(self, question):
+    def split_question(self, question: str):
         messages = []
-        glm_run_record = ''
-        answer = ''
         messages.append({
             "role": "system",
             "content": "你是一个乐于解答各种问题的助手，你的任务是为用户提供专业、准确、有见地的建议。"
         })
         messages.append({
             "role": "user",
-            "content": question
+            "content":'''现有二个工具，分别是查公司信息、查法律文书信息。帮我对问题进行拆解，分哪些步骤可以解决，不用回答问题。
+只输出一个列表，例如：['第一步','第二步'...]'''
+        })
+        messages.append({
+            "role": "user",
+            "content": '问题:' + question
+        })
+        response = self.client.chat.completions.create(
+            model=self.model_type,  # 填写需要调用的模型名称
+            messages=messages,
+        )
+        prompt = response.choices[0].message.content
+        return prompt
+
+    def run(self, question):
+        messages = []
+        prompt = self.split_question(question)
+        glm_run_record = prompt + '\n'
+        messages.append({
+            "role": "system",
+            "content": "你是一个乐于解答各种问题的助手，你的任务是为用户提供专业、准确、有见地的建议。"
+        })
+        messages.append({
+            "role": "user",
+            "content": '根据提示回答问题\n' +
+                       '提示：' + prompt + '\n' +
+                       "问题：" + question
         })
         while True:
             response = self.client.chat.completions.create(
