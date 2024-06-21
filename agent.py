@@ -12,7 +12,7 @@ class Agent:
         load_dotenv()
         api_key = os.getenv('glm_api_key')
         self.client = ZhipuAI(api_key=api_key)
-        self.model_type = 'glm-4'
+        self.model_type = 'glm-4-0520'
         self.tools_handler = tools_handler.ToolsHandler()
         self.tools = self.tools_handler.get_glm_tools_list()
 
