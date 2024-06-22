@@ -71,7 +71,7 @@ class SearchCompanyName(Base):
                 if data == []:
                     data = self.search_company_name_by_info('公司简称', value)
 
-        elif key in self.register_key:
+        if data == [] and key in self.register_key:
             data = self.search_company_name_by_register(key, value)
 
         if data == []:
