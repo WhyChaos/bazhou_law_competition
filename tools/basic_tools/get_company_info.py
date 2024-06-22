@@ -25,15 +25,16 @@ class GetCompanyInfo(Base):
             data = {}
         return data
 
-    def get_company_info_and_register_and_sub(self, company_name: str) -> dict:
-        data = self.get_company_info(company_name)
-        data = data | self.get_company_register(company_name)
-        data = data | self.get_sub_company_info(company_name)
+    def get_company_sub(self, company_name: str) -> dict:
+        data = self.get_sub_company_info(company_name)
         return data
 
-    def get_company_info_and_register_and_sub_and_sub_list(self, company_name: str) -> dict:
-        data = self.get_company_info_and_register_and_sub(company_name)
+    def get_company_info_and_register(self, company_name: str) -> dict:
+        data = self.get_company_info(company_name)
+        data = data | self.get_company_register(company_name)
         return data
+
+
 
     # def get_company_list_info_and_register(self, company_name_list: list) -> dict:
     #     data = {}

@@ -1,12 +1,14 @@
 from tools.company_info import CompanyInfo
 from tools.legal_document_info import LegalDocumentInfo
+from tools.sub_company_info import SubCompanyInfo
 
 
 class ToolsHandler:
     def __init__(self):
         company_info = CompanyInfo()
         legal_document_info = LegalDocumentInfo()
-        self.tool_list = [company_info, legal_document_info]
+        sub_company_info = SubCompanyInfo()
+        self.tool_list = [company_info, legal_document_info, sub_company_info]
 
     def get_glm_tools_list(self) -> list:
         glm_tools_list = []

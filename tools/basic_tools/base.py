@@ -31,11 +31,15 @@ class Base(object):
         self.law_conn = sqlite3.connect('law.db')
         self.law_api_table_name = 'law_api_table'
         self.database_schema = f"""公司信息表（CompanyInfo）有下列字段：
-{json.dumps(list(set(self.info_key + self.register_key + self.sub_key)), ensure_ascii=False)}
+{json.dumps(list(set(self.info_key + self.register_key)), ensure_ascii=False)}
 -------------------------------------
 
 法律文书表（LegalDocument）有下列字段：
 {json.dumps(self.legal_document_key, ensure_ascii=False)}
+-------------------------------------
+
+公司子公司融资信息表（SubCompanyInfo）有下列字段：
+{json.dumps(self.sub_key, ensure_ascii=False)}
 -------------------------------------
 """
 
