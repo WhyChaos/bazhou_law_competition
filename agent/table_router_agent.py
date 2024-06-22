@@ -1,8 +1,9 @@
 
 from agent.base_agent import BaseAgent
+from utils.schema import database_schema
 
 
-class RouterAgent(BaseAgent):
+class TableRouterAgent(BaseAgent):
     def __init__(self):
         super().__init__()
 
@@ -10,10 +11,9 @@ class RouterAgent(BaseAgent):
         messages = []
         messages.append({
             "role": "system",
-            "content": '''你是一位问题分类的专家，你的任务是根据用户给出的query，将其分为开放的问题和依赖数据库的问题。
-数据库的表有公司信息表、融资信息表、法院判决书表。
-一定只输出0或1，不要有其他内容。
-0表示开放的问题，1表示依赖数据库的问题'''
+            "content": '你是一个好助手，你的任务是根据用户给出的问题，告诉用户回答这个问题需要使用的表。' +
+            database_schema + '\n公司信息表用0表示，子公司融资信息表用1表示，法院判决书表用1表示。\n' +
+            '只输出0或1或2，不要输出其他内容。'
         })
         messages.append({
             "role": "user",
@@ -28,11 +28,11 @@ class RouterAgent(BaseAgent):
                 top_p=self.top_p,
                 max_tokens=2
             )
-            type = response.choices[0].message.content
-            print(f'{query}-----{type}')
-            if type == '0' or type == '1':
+            table_type = response.choices[0].message.content
+            print(f'{query}-----{table_type}')
+            if table_type == '0' or table_type == '1' or table_type == '2':
                 break
             count += 1
             if count > 5:
                 break
-        return type
+        return table_type
