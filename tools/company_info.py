@@ -40,7 +40,7 @@ class CompanyInfo:
         if isinstance(company_name_list, str):
             return company_name_list
         for company_name in company_name_list:
-            info_list.append(self.get_company_info.get_company_info_and_register_and_sub(
+            info_list.append(self.get_company_info.get_company_info_and_register_and_sub_and_son(
                 company_name['公司名称']))
         info = {}
         info['公司数量'] = len(info_list)

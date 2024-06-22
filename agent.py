@@ -14,7 +14,7 @@ class Agent:
         load_dotenv()
         api_key = os.getenv('glm_api_key')
         self.client = ZhipuAI(api_key=api_key)
-        self.model_type = 'glm-4'
+        self.model_type = 'glm-4-0520'
         self.tools_handler = tools_handler.ToolsHandler()
         self.tools = self.tools_handler.get_glm_tools_list()
 
@@ -26,16 +26,17 @@ class Agent:
 
         self.base_tool = Base()
 
-        self.split_question_agent_prompt = """你是一位金融法律专家，你的任务是根据用户给出的query，拆分问题，给出解决步骤，不是直接回答问题。
-输给一个list，如下所示：
+        self.none_tool_agent_prompt = '你是一个法律专家，请根据你的专业知识回答用户的问题'
+
+        self.split_question_agent_prompt = """你是一位分析问题的专家，你的任务是根据用户给出的query，考虑现有的两个工具拆分问题，给出解决步骤，不是直接回答问题。
+只输出一个list，如下所示：
 ['第一步','第二步'...]
 
-提供两个工具：
+提供三个工具：
 公司信息查询：根据法律文书信息字段是某个值时，查询所有满足条件的法律文书信息和数量。
-法律文书查询：根据公司某个基本信息字段是某个值时，查询所有满足条件的公司信息和数量
-
-所提供的工具接口可以查询两张数据表的信息，数据表的schema如下:
-""" + self.base_tool.database_schema
+法律文书查询：根据公司某个基本信息字段是某个值时，查询所有满足条件的公司信息和数量。
+子公司融资查询：根据子公司融资信息字段是某个值时，查询所有满足条件的子公司融资信息和数量。
+"""
 
         self.answer_agent_prompt = """你是一位金融法律专家，你的任务是根据用户给出的query，调用给出的工具接口，获得用户想要查询的答案。
 所提供的工具接口可以查询两张数据表的信息，数据表的schema如下:
@@ -51,10 +52,6 @@ class Agent:
             "role": "user",
             "content": question
         })
-        messages.append({
-            "role": "user",
-            "content": '问题:' + question
-        })
         response = self.client.chat.completions.create(
             model=self.model_type,  # 填写需要调用的模型名称
             messages=messages,
@@ -64,9 +61,28 @@ class Agent:
         prompt = response.choices[0].message.content
         return prompt
 
+    def answer_with_no_tool(self, question: str):
+        self.glm_run_record += '调用无工具agent'
+        messages = []
+        messages.append({
+            "role": "system",
+            "content": self.none_tool_agent_prompt
+        })
+        messages.append({
+            "role": "user",
+            "content": question
+        })
+        response = self.client.chat.completions.create(
+            model=self.model_type,  # 填写需要调用的模型名称
+            messages=messages,
+            temperature=self.temperature,
+            top_p=self.top_p
+        )
+        return response
+
     def run(self, question):
         messages = []
-        glm_run_record = ''
+        self.glm_run_record = ''
         # prompt = self.split_question(question)
         # glm_run_record += prompt + '\n'
         messages.append({
@@ -77,6 +93,7 @@ class Agent:
             "role": "user",
             "content": question
         })
+        is_call_tool = False
         while True:
             response = self.client.chat.completions.create(
                 model=self.model_type,  # 填写需要调用的模型名称
@@ -86,9 +103,12 @@ class Agent:
                 top_p=self.top_p
             )
             if response.choices[0].message.tool_calls is None:
+                if is_call_tool is False:
+                    response = self.answer_with_no_tool(question)
                 answer = response.choices[0].message.content
-                glm_run_record += f'finish_reason:{response.choices[0].finish_reason};content:{response.choices[0].message.content}\n'
+                self.glm_run_record += f'finish_reason:{response.choices[0].finish_reason};content:{response.choices[0].message.content}\n'
                 break
+            is_call_tool = True
             messages.append(response.choices[0].message.model_dump())
             tool_call = response.choices[0].message.tool_calls[0]
             args = tool_call.function.arguments
@@ -99,7 +119,7 @@ class Agent:
                 "content": f"{json.dumps(function_result, ensure_ascii=False)}",
                 "tool_call_id": tool_call.id
             })
-            glm_run_record += (f'finish_reason:{response.choices[0].finish_reason};' +
+            self.glm_run_record += (f'finish_reason:{response.choices[0].finish_reason};' +
                                f'tool_name:{response.choices[0].message.tool_calls[0].function.name};' +
                                f'tool_arguments:{response.choices[0].message.tool_calls[0].function.arguments};' +
                                f'tool_result:{json.dumps(function_result, ensure_ascii=False)}\n')
@@ -107,7 +127,7 @@ class Agent:
             print(response.choices[0].message)
 
         try:
-            self.insert_glm_run(question, glm_run_record)
+            self.insert_glm_run(question, self.glm_run_record)
         except Exception as e:
             print('记录失败')
         return answer
