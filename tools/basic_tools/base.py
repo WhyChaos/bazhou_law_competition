@@ -30,6 +30,14 @@ class Base(object):
         ]
         self.law_conn = sqlite3.connect('law.db')
         self.law_api_table_name = 'law_api_table'
+        self.database_schema = f"""公司信息表（CompanyInfo）有下列字段：
+{json.dumps(list(set(self.info_key + self.register_key + self.sub_key)), ensure_ascii=False)}
+-------------------------------------
+
+法律文书表（LegalDocument）有下列字段：
+{json.dumps(self.legal_document_key, ensure_ascii=False)}
+-------------------------------------
+"""
 
     def post_request(self, api: str, data: dict):
         query_result = self.query_law_api(api_name=api, data=self.json_dumps(data))

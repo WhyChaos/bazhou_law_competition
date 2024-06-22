@@ -11,16 +11,17 @@ class LegalDocumentInfo:
             "type": "function",
             "function": {
                 "name": self.tool_name,
-                "description": "查法律文书信息。",
+                "description": "根据法律文书信息字段是某个值时，查询所有满足条件的法律文书信息和数量",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "key": {
-                            "description": "法律文书中的字段名：" + "、".join(self.get_legal_document.legal_document_key) + '。',
+                            "description": "法律文书信息字段名称",
+                            "enum": self.get_legal_document.legal_document_key,
                             "type": "string"
                         },
                         "value": {
-                            "description": "法律文书中的字段值。",
+                            "description": "法律文书信息字段具体的值",
                             "type": "string"
                         },
                     },

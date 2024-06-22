@@ -13,19 +13,18 @@ class CompanyInfo:
             "type": "function",
             "function": {
                 "name": self.tool_name,
-                "description": "查公司信息。",
+                "description": "根据公司某个基本信息字段是某个值时，查询所有满足条件的公司信息和数量",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "key": {
-                            "description": "公司信息中的字段名，从如下中选择：" + "、".join(
-                                self.search_company_name_by_info.info_key) + '、' + "、".join(
-                                self.search_company_name_by_info.register_key) + '、' + "、".join(
-                                self.search_company_name_by_info.sub_key) + '。',
+                            "description": "公司信息的字段名称",
+                            "enum": list(set(
+                                self.search_company_name_by_info.info_key + self.search_company_name_by_info.register_key + self.search_company_name_by_info.sub_key)),
                             "type": "string"
                         },
                         "value": {
-                            "description": "公司信息中的对应的字段值。",
+                            "description": "'公司信息字段具体的值'",
                             "type": "string"
                         },
                     },
@@ -36,15 +35,16 @@ class CompanyInfo:
 
     def run(self, key: str, value: str):
         info_list = []
-        company_name_list = self.search_company_name_by_info.search_company_name_by_info_and_register_and_sub(key=key, value=value)
+        company_name_list = self.search_company_name_by_info.search_company_name_by_info_and_register_and_sub(key=key,
+                                                                                                              value=value)
         if isinstance(company_name_list, str):
             return company_name_list
-        if len(company_name_list) == 1:
-            info = self.get_company_info.get_company_info_and_register_and_sub_and_sub_list(company_name_list[0]['公司名称'])
-        else:
-            info = {}
-            info['公司数量'] = len(company_name_list)
-            info['公司列表'] = company_name_list
+        for company_name in company_name_list:
+            info_list.append(self.get_company_info.get_company_info_and_register_and_sub_and_sub_list(
+                company_name['公司名称']))
+        info = {}
+        info['公司数量'] = len(info_list)
+        info['公司信息'] = info_list
         return info
 
     # def run_tmp(self, company_name_list: list) -> list:

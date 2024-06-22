@@ -6,29 +6,50 @@ from dotenv import load_dotenv
 from tools import tools_handler
 import sqlite3
 
+from tools.basic_tools.base import Base
+
 
 class Agent:
     def __init__(self):
         load_dotenv()
         api_key = os.getenv('glm_api_key')
         self.client = ZhipuAI(api_key=api_key)
-        self.model_type = 'glm-4-0520'
+        self.model_type = 'glm-4'
         self.tools_handler = tools_handler.ToolsHandler()
         self.tools = self.tools_handler.get_glm_tools_list()
 
         self.law_conn = sqlite3.connect('law.db')
         self.law_glm_run_table_name = 'law_glm_run_table'
 
+        self.temperature = 0.95
+        self.top_p = 0.9
+
+        self.base_tool = Base()
+
+        self.split_question_agent_prompt = """你是一位金融法律专家，你的任务是根据用户给出的query，拆分问题，给出解决步骤，不是直接回答问题。
+输给一个list，如下所示：
+['第一步','第二步'...]
+
+提供两个工具：
+公司信息查询：根据法律文书信息字段是某个值时，查询所有满足条件的法律文书信息和数量。
+法律文书查询：根据公司某个基本信息字段是某个值时，查询所有满足条件的公司信息和数量
+
+所提供的工具接口可以查询两张数据表的信息，数据表的schema如下:
+""" + self.base_tool.database_schema
+
+        self.answer_agent_prompt = """你是一位金融法律专家，你的任务是根据用户给出的query，调用给出的工具接口，获得用户想要查询的答案。
+所提供的工具接口可以查询两张数据表的信息，数据表的schema如下:
+""" + self.base_tool.database_schema
+
     def split_question(self, question: str):
         messages = []
         messages.append({
             "role": "system",
-            "content": "你是一个乐于解答各种问题的助手，你的任务是为用户提供专业、准确、有见地的建议。"
+            "content": self.split_question_agent_prompt
         })
         messages.append({
             "role": "user",
-            "content":'''现有二个工具，分别是查公司信息、查法律文书信息。帮我对问题进行拆解，分哪些步骤可以解决，不用回答问题。
-只输出一个列表，例如：['第一步','第二步'...]'''
+            "content": question
         })
         messages.append({
             "role": "user",
@@ -37,29 +58,32 @@ class Agent:
         response = self.client.chat.completions.create(
             model=self.model_type,  # 填写需要调用的模型名称
             messages=messages,
+            temperature=self.temperature,
+            top_p=self.top_p
         )
         prompt = response.choices[0].message.content
         return prompt
 
     def run(self, question):
         messages = []
-        prompt = self.split_question(question)
-        glm_run_record = prompt + '\n'
+        glm_run_record = ''
+        # prompt = self.split_question(question)
+        # glm_run_record += prompt + '\n'
         messages.append({
             "role": "system",
-            "content": "你是一个乐于解答各种问题的助手，你的任务是为用户提供专业、准确、有见地的建议。"
+            "content": self.answer_agent_prompt
         })
         messages.append({
             "role": "user",
-            "content": '根据提示回答问题\n' +
-                       '提示：' + prompt + '\n' +
-                       "问题：" + question
+            "content": question
         })
         while True:
             response = self.client.chat.completions.create(
                 model=self.model_type,  # 填写需要调用的模型名称
                 messages=messages,
                 tools=self.tools,
+                temperature=self.temperature,
+                top_p=self.top_p
             )
             if response.choices[0].message.tool_calls is None:
                 answer = response.choices[0].message.content
