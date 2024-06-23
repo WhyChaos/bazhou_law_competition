@@ -11,7 +11,7 @@ class TableRouterAgent(BaseAgent):
         messages = []
         messages.append({
             "role": "system",
-            "content": '你是一个好助手，你的任务是根据用户给出的问题，告诉用户回答这个问题需要使用的表。' +
+            "content": '你是一个好助手，你的任务是根据用户给出的问题，告诉用户回答这个问题需要哪张表。' +
             database_schema + '\n公司信息表用0表示，子公司融资信息表用1表示，法院判决书表用1表示。\n' +
             '只输出0或1或2，不要输出其他内容。'
         })
@@ -35,4 +35,6 @@ class TableRouterAgent(BaseAgent):
             count += 1
             if count > 5:
                 break
+        if table_type not in ['0', '1', '2']:
+            return '2'
         return table_type
