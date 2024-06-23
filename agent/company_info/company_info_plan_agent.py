@@ -6,7 +6,7 @@ import os
 from tools.tools_handler.company_info_tools_handler import CompanyInfoToolsHandler
 
 
-class CompanyInfoRefineAgent(BaseAgent):
+class CompanyInfoPlanAgent(BaseAgent):
     def __init__(self):
         super().__init__()
 

@@ -1,4 +1,4 @@
-from agent.company_info.company_info_refine_agent import CompanyInfoRefineAgent
+from agent.company_info.company_info_plan_agent import CompanyInfoPlanAgent
 import json
 import concurrent.futures
 
@@ -35,7 +35,7 @@ class Game:
 
     def run_one_question(self, question_dict:dict):
         print(f"目前ID:", question_dict['id'])
-        agent = CompanyInfoRefineAgent()
+        agent = CompanyInfoPlanAgent()
         if question_dict['table_type'] == '0':
             plan = agent.run(question=question_dict['question'])
             answer_dict = {'id': question_dict['id'], 'table_type': question_dict['table_type'], 'question': question_dict['question'], 'plan': plan}
