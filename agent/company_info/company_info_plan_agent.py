@@ -3,7 +3,6 @@ import json
 from agent.base_agent import BaseAgent
 import os
 
-from tools.tools_handler.company_info_tools_handler import CompanyInfoToolsHandler
 
 
 class CompanyInfoPlanAgent(BaseAgent):
