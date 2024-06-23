@@ -1,7 +1,7 @@
-from tools.basic_tools.base import Base
+from tools.basic_tools.base_tool import BaseTool
 
 
-class GetLegalDocument(Base):
+class GetLegalDocument(BaseTool):
     def __init__(self):
         super(GetLegalDocument, self).__init__()
 

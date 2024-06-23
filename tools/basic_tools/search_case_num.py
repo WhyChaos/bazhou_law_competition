@@ -1,7 +1,7 @@
-from tools.basic_tools.base import Base
+from tools.basic_tools.base_tool import BaseTool
 
 
-class SearchCaseNum(Base):
+class SearchCaseNum(BaseTool):
     def __init__(self):
         super(SearchCaseNum, self).__init__()
 

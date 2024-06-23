@@ -1,7 +1,7 @@
-from tools.basic_tools.base import Base
+from tools.basic_tools.base_tool import BaseTool
 
 
-class SearchCompanyName(Base):
+class SearchCompanyName(BaseTool):
     def __init__(self):
         super(SearchCompanyName, self).__init__()
 

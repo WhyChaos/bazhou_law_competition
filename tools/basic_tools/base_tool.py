@@ -6,7 +6,7 @@ import sqlite3
 import json
 
 
-class Base(object):
+class BaseTool(object):
     def __init__(self):
         load_dotenv()
         self.base_url = 'https://comm.chatglm.cn/law_api/'

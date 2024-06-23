@@ -24,7 +24,7 @@ class CompanyInfo:
                             "type": "string"
                         },
                         "value": {
-                            "description": "'公司信息字段具体的值'",
+                            "description": "公司信息字段具体的值",
                             "type": "string"
                         },
                     },
