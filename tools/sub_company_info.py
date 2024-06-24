@@ -1,5 +1,5 @@
-from tools.basic_tools.get_company_info import GetCompanyInfo
-from tools.basic_tools.search_company_name import SearchCompanyName
+from tools.basic_function.get_company_info import GetCompanyInfo
+from tools.basic_function.search_company_name import SearchCompanyName
 
 
 class SubCompanyInfo:

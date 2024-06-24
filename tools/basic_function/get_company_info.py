@@ -1,7 +1,7 @@
-from tools.basic_tools.base_tool import BaseTool
-from tools.basic_tools.search_company_name import SearchCompanyName
+from tools.basic_function.base_function import BaseFunction
+from tools.basic_function.search_company_name import SearchCompanyName
 
-class GetCompanyInfo(BaseTool):
+class GetCompanyInfo(BaseFunction):
     def __init__(self):
         super(GetCompanyInfo, self).__init__()
         self.search_company_name = SearchCompanyName()
@@ -27,6 +27,11 @@ class GetCompanyInfo(BaseTool):
 
     def get_company_sub(self, company_name: str) -> dict:
         data = self.get_sub_company_info(company_name)
+        return data
+
+    def get_company_info_and_register(self, company_name: str) -> dict:
+        data = self.get_company_info(company_name)
+        data = data | self.get_company_register(company_name)
         return data
 
     def get_company_info_and_register_and_sub(self, company_name: str) -> dict:

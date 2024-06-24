@@ -6,7 +6,7 @@ import sqlite3
 import json
 
 
-class BaseTool(object):
+class BaseFunction(object):
     def __init__(self):
         load_dotenv()
         self.base_url = 'https://comm.chatglm.cn/law_api/'
@@ -14,10 +14,8 @@ class BaseTool(object):
         self.info_key = [
             '公司名称', '公司简称', '英文名称', '关联证券', '公司代码', '曾用简称', '所属市场', '所属行业', '上市日期',
             '法人代表', '总经理', '董秘', '邮政编码', '注册地址', '办公地址', '联系电话', '传真', '官方网址',
-            '电子邮箱', '入选指数', '主营业务', '经营范围', '机构简介', '每股面值', '首发价格', '首发募资净额', '首发主承销商'
-        ]
-        self.register_key = [
-            '公司名称', '登记状态', '统一社会信用代码', '注册资本', '成立日期', '省份', '城市', '区县', '注册号',
+            '电子邮箱', '入选指数', '主营业务', '经营范围', '机构简介', '每股面值', '首发价格', '首发募资净额', '首发主承销商',
+            '登记状态', '统一社会信用代码', '注册资本', '成立日期', '省份', '城市', '区县', '注册号',
             '组织机构代码', '参保人数', '企业类型', '曾用名'
         ]
         self.sub_key = [
@@ -30,18 +28,6 @@ class BaseTool(object):
         ]
         self.law_conn = sqlite3.connect('law.db')
         self.law_api_table_name = 'law_api_table'
-        self.database_schema = f"""公司信息表（CompanyInfo）有下列字段：
-{json.dumps(list(set(self.info_key + self.register_key)), ensure_ascii=False)}
--------------------------------------
-
-法律文书表（LegalDocument）有下列字段：
-{json.dumps(self.legal_document_key, ensure_ascii=False)}
--------------------------------------
-
-公司子公司融资信息表（SubCompanyInfo）有下列字段：
-{json.dumps(self.sub_key, ensure_ascii=False)}
--------------------------------------
-"""
 
     def post_request(self, api: str, data: dict):
         query_result = self.query_law_api(api_name=api, data=self.json_dumps(data))

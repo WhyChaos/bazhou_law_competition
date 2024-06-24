@@ -33,7 +33,7 @@ class Game:
     def run_one_question(self, question_dict:dict):
         print(f"目前ID:", question_dict['id'])
         agent = Agent()
-        answer = agent.run(question=question_dict['question'])
+        # answer = agent.run(question=question_dict['question'])
         answer_dict = {'id': question_dict['id'], 'question': question_dict['question'], 'answer': answer}
         self.append_to_jsonl(self.submission_file_path, answer_dict)
         return question_dict['id']
@@ -63,5 +63,7 @@ class Game:
 
 if __name__ == '__main__':
     game = Game()
-    game.run()
-    # game.run_one_question({"id": 13, "question": "Shanghai Electric Power Co., Ltd.有哪些子公司？对于子公司的参股比例分别是多少？"})
+    # game.run()
+    tmp = {"id": 124, "question": "简述侵犯著作权罪的客观行为。", "answer": "侵犯著作权罪的客观行为主要表现为未经著作权人许可，擅自复制、发行、出租、展览、表演、放映、广播、信息网络传播著作权人的作品，或者未经专利权人许可，擅自实施专利，或者未经商标权人许可，擅自使用商标，或者未经著作权人许可，擅自使用与著作权有关的权利，情节严重的行为。\n\n具体来说，这些客观行为包括：\n\n1. 未经著作权人许可，复制、发行、出租、展览、表演、放映、广播、信息网络传播著作权人的作品，包括文字作品、音乐作品、美术作品、视听作品、计算机软件等。\n\n2. 未经专利权人许可，实施专利，包括制造、使用、许诺销售、销售、进口专利产品，或者使用专利方法，或者使用、许诺销售、销售、进口依照该专利方法直接获得的 产品。\n\n3. 未经商标权人许可，使用商标，包括在同一种商品上使用与其注册商标相同的商标，或者在同一种商品上使用与其注册商标近似的商标，或者销售明知是他人的注册 商标标识。\n\n4. 未经著作权人许可，使用与著作权有关的权利，包括出版、表演、录音录像、播放、展览、发行、信息网络传播等。\n\n这些行为需达到情节严重的程度，如侵权时间长、范围广、获利大等，才能构成侵犯著作权罪。"}
+
+    game.run_one_question(tmp)

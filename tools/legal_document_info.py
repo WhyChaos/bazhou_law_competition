@@ -1,5 +1,5 @@
-from tools.basic_tools.get_legal_document import GetLegalDocument
-from tools.basic_tools.search_case_num import SearchCaseNum
+from tools.basic_function.get_legal_document import GetLegalDocument
+from tools.basic_function.search_case_num import SearchCaseNum
 class LegalDocumentInfo:
     def __init__(self):
         self.tool_name = 'legal_document_info'
