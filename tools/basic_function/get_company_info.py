@@ -10,17 +10,35 @@ class GetCompanyInfo(BaseFunction):
     def get_company_info(self, company_name: str) -> dict:
         data = self.post_request(api='get_company_info', data={"company_name": company_name})
         if data is None or data == []:
+            company_name = company_name.replace('(','（').replace(')','）')
+            data = self.post_request(api='get_company_info', data={"company_name": company_name})
+        if data is None or data == []:
+            company_name = company_name.replace('（', '(').replace('）', ')')
+            data = self.post_request(api='get_company_info', data={"company_name": company_name})
+        if data is None or data == []:
             data = {}
         return data
 
     def get_company_register(self, company_name: str) -> dict:
         data = self.post_request(api='get_company_register', data={"company_name": company_name})
         if data is None or data == []:
+            company_name = company_name.replace('(','（').replace(')','）')
+            data = self.post_request(api='get_company_register', data={"company_name": company_name})
+        if data is None or data == []:
+            company_name = company_name.replace('（', '(').replace('）', ')')
+            data = self.post_request(api='get_company_register', data={"company_name": company_name})
+        if data is None or data == []:
             data = {}
         return data
 
     def get_sub_company_info(self, company_name: str) -> dict:
         data = self.post_request(api='get_sub_company_info', data={"company_name": company_name})
+        if data is None or data == []:
+            company_name = company_name.replace('(','（').replace(')','）')
+            data = self.post_request(api='get_sub_company_info', data={"company_name": company_name})
+        if data is None or data == []:
+            company_name = company_name.replace('（', '(').replace('）', ')')
+            data = self.post_request(api='get_sub_company_info', data={"company_name": company_name})
         if data is None or data == []:
             data = {}
         return data
