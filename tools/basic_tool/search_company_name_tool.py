@@ -6,20 +6,20 @@ class SearchCompanyNameTool:
     def __init__(self):
         self.tool_name = 'search_company_name_tool'
         self.get_company_info = GetCompanyInfo()
-        self.search_company_name_by_info = SearchCompanyName()
+        self.search_company_name = SearchCompanyName()
 
     def get_glm_tool_dict(self) -> dict:
         return {
             "type": "function",
             "function": {
                 "name": self.tool_name,
-                "description": "根据公司某个基本信息字段是某个值时，查询所有满足条件的公司名称和数量",
+                "description": "找公司名称的工具：根据公司某个基本信息字段是某个值时，查询所有满足条件的公司名称和数量",
                 "parameters": {
                     "type": "object",
                     "properties": {
                         "key": {
                             "description": "公司信息的字段名称",
-                            "enum": list(set(self.search_company_name_by_info.info_key) - set(['公司名称', '公司简称', '英文名称', '经营范围'])),
+                            "enum": list(set(self.search_company_name.info_key) - set(['公司名称', '公司简称', '英文名称', '经营范围'])),
                             "type": "str"
                         },
                         "value": {
@@ -34,8 +34,7 @@ class SearchCompanyNameTool:
 
     def run(self, key: str, value: str):
         info = {}
-        company_name_list = self.search_company_name_by_info.search_company_name_by_info_and_register(key=key,
-                                                                                                      value=value)
+        company_name_list = self.search_company_name.search_company_name_by_info_and_register(key=key, value=value)
         if isinstance(company_name_list, str):
             return company_name_list
 

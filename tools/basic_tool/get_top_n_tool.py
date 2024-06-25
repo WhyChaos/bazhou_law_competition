@@ -11,7 +11,7 @@ class GetTopNTool:
             "type": "function",
             "function": {
                 "name": self.tool_name,
-                "description": '根据某数字类型字段取最大的几个，比如top几、前几、最大的几个，字段如注册资本',
+                "description": '筛选工具：根据某数字类型字段取最大的几个，比如top几、前几、最大的几个，字段如注册资本',
                 "parameters": {
                     "type": "object",
                     "properties": {
