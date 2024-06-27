@@ -12,7 +12,7 @@ class CompanyInfoPlanAgent(BaseAgent):
 
     def run(self, question):
         messages = []
-        self.glm_run_record = 'company_info_refine_table\n'
+        self.glm_run_record = 'company_info_plan_table\n'
 
         messages.append({
             "role": "user",
