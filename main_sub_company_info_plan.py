@@ -1,4 +1,4 @@
-from agent.company_info.company_info_plan_agent import CompanyInfoPlanAgent
+from agent.sub_company_info.sub_company_info_plan_agent import SubCompanyInfoPlanAgent
 import json
 import concurrent.futures
 
@@ -8,7 +8,7 @@ import threading
 class Game:
     def __init__(self):
         self.max_threads = 5
-        self.question_file_path = 'data/company_info_question.jsonl'
+        self.question_file_path = 'data/company_sub_question.jsonl'
         self.submission_file_path = f'data/submission_{self.get_current_time_string()}.jsonl'
         self.question_list = self.read_jsonl(self.question_file_path)
         self.lock = threading.Lock()
@@ -35,8 +35,8 @@ class Game:
 
     def run_one_question(self, question_dict:dict):
         print(f"目前ID:", question_dict['id'])
-        agent = CompanyInfoPlanAgent()
-        if question_dict['table_type'] == '0':
+        agent = SubCompanyInfoPlanAgent()
+        if question_dict['table_type'] == '1':
             plan = agent.run(question=question_dict['question'])
             answer_dict = {'id': question_dict['id'], 'table_type': question_dict['table_type'], 'question': question_dict['question'], 'plan': plan}
             self.append_to_jsonl(self.submission_file_path, answer_dict)
