@@ -29,7 +29,7 @@ class GetSubCompanyInfoTool:
                     "properties": {
                         "mother_company_name": {
                             "description": "母公司名称",
-                            "type": "string"
+                            "type": "str"
                         },
                     },
                     "required": ["mother_company_name"]
