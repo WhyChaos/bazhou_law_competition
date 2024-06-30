@@ -4,7 +4,7 @@ from tools.basic_function.search_company_name import SearchCompanyName
 
 class GetSubCompanyInfoTool:
     def __init__(self):
-        self.tool_name = 'sub_company_info'
+        self.tool_name = 'get_sub_company_info_tool'
         self.get_company_info = GetCompanyInfo()
         self.search_company_name_by_info = SearchCompanyName()
         self.name_to_display = {
