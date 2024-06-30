@@ -24,3 +24,10 @@ def convert_to_number(amount_str):
         number *= float(amount_str)
 
     return number
+
+def convert_from_number(amount: float) -> str:
+    if amount / (10 ** 8) >= 1:
+        return str(amount / (10 ** 8)) + '亿'
+    if amount / (10 ** 4) >= 1:
+        return str(amount / (10 ** 4)) + '万'
+    return str(amount)
