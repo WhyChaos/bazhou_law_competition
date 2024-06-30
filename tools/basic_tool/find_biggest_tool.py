@@ -39,5 +39,7 @@ class FindBiggestTool:
             for info in info_list:
                 if convert_to_number(info[key_name]) == convert_to_number(info_list[0][key_name]):
                     res_list.append(info)
-        return info_list
+                else:
+                    break
+        return res_list
 

@@ -29,9 +29,12 @@ class ScreeningTool:
             }
         }
 
-    def run(self, key_name: str, value: int, info_list: dict) -> list:
+    def run(self, key_name: str, value: float, info_list) -> list:
+        if '子公司信息' in info_list:
+            info_list = info_list['子公司信息']
+
         res_list = []
-        for info in info_list['子公司信息']:
+        for info in info_list:
             if info[key_name]:
                 if convert_to_number(info[key_name]) > value:
                     res_list.append(info)

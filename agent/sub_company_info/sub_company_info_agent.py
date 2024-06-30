@@ -5,16 +5,17 @@ import os
 
 from tools.tools_handler.tools_handler import ToolsHandler
 
-from tools.basic_tool.get_company_info_tool import GetCompanyInfoTool
-from tools.basic_tool.search_company_name_tool import SearchCompanyNameTool
-from tools.basic_tool.get_top_n_tool import GetTopNTool
+from tools.basic_tool.get_mother_company_name_tool import GetMotherCompanyNameTool
+from tools.basic_tool.get_sub_company_info_tool import GetSubCompanyInfoTool
+from tools.basic_tool.screening_tool import ScreeningTool
+from tools.basic_tool.find_biggest_tool import FindBiggestTool
 
 
 class SubCompanyInfoAgent(BaseAgent):
     def __init__(self):
         super().__init__()
-        self.run_log_table = os.getenv('run_log_company_info')
-        self.tools_handler = ToolsHandler([])
+        self.run_log_table = os.getenv('run_log_sub_company_info')
+        self.tools_handler = ToolsHandler([GetMotherCompanyNameTool, GetSubCompanyInfoTool, ScreeningTool, FindBiggestTool])
         self.tools = self.tools_handler.get_glm_tools_list()
 
 
@@ -47,10 +48,9 @@ class SubCompanyInfoAgent(BaseAgent):
 
                 if response.choices[0].message.tool_calls is None:
                     continue
-                # messages_tool.append(response.choices[0].message.model_dump())
                 tool_call = response.choices[0].message.tool_calls[0]
                 args = tool_call.function.arguments
-                if tool_call.function.name == 'get_top_n_tool':
+                if tool_call.function.name == 'screening_tool' or tool_call.function.name == 'find_biggest_tool':
                     args_dict = json.loads(args) | {'info_list': tool_result[-1]}
                     function_result = self.tools_handler.call_function(function_name=tool_call.function.name,
                                                                    args_dict=args_dict)
@@ -75,11 +75,6 @@ class SubCompanyInfoAgent(BaseAgent):
                     tool_result.append(function_result)
                     call_tool_result.append(tool_choice)
                     break
-                # messages_tool.append({
-                #     "role": "tool",
-                #     "content": f"{json.dumps(function_result, ensure_ascii=False)}",
-                #     "tool_call_id": tool_call.id
-                # })
         while True:
             try:
                 messages.append({
@@ -139,16 +134,17 @@ class SubCompanyInfoAgent(BaseAgent):
         messages.append({
             "role": "system",
             "content": '''你是一个语义理解的助手，你的任务是根据用户的query,判断调用什么工具。
-使用查公司信息的工具时，输出'get_company_info_tool',
-使用找公司名称的工具时，输出'search_company_name_tool',
-使用筛选工具时，输出'get_top_n_tool'。
+查子公司的工具：输出'get_sub_company_info_tool'。
+找母公司的工具：输出'get_mother_company_name_tool'。
+筛选工具：输出'screening_tool'。
+找最大的工具：输出'find_biggest_tool'。
 不要输出其他内容。
 '''.format()
         })
         messages.append({
             "role": "user",
             "content": 'query：' + query + '''
-回答我get_company_info_tool或search_company_name_tool或get_top_n_tool'''
+回答我get_sub_company_info_tool或get_mother_company_name_tool或screening_tool或find_biggest_tool'''
         })
         while True:
             response = self.client.chat.completions.create(
@@ -159,11 +155,14 @@ class SubCompanyInfoAgent(BaseAgent):
                 max_tokens=20
             )
             answer = response.choices[0].message.content
-            if answer == 'get_company_info_tool':
+            if answer == 'get_sub_company_info_tool':
                 break
-            if answer == 'search_company_name_tool':
+            if answer == 'get_mother_company_name_tool':
                 break
-            if answer == 'get_top_n_tool':
+            if answer == 'screening_tool':
                 break
+            if answer == 'find_biggest_tool':
+                break
+            print('工具选retry')
         return answer
 
