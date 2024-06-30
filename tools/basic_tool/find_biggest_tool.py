@@ -1,6 +1,6 @@
 from tools.basic_function.get_company_info import GetCompanyInfo
 from tools.basic_function.search_company_name import SearchCompanyName
-from utils.utils import convert_to_number
+from utils.utils import convert_to_number, convert_from_number
 
 
 class FindBiggestTool:
@@ -26,7 +26,9 @@ class FindBiggestTool:
             }
         }
 
-    def run(self, key_name: str, value: int, info_list: list) -> list:
+    def run(self, key_name: str, value: int, info_dict: dict) -> dict:
+
+        info_list = info_dict['子公司信息']
         def custom_sort(data):
             if data[key_name]:
                 return -convert_to_number(data[key_name])
@@ -41,5 +43,13 @@ class FindBiggestTool:
                     res_list.append(info)
                 else:
                     break
-        return res_list
+
+        info_dict['子公司数量'] = len(res_list)
+        info_dict['子公司信息'] = []
+        total_amount = 0
+        for item in res_list:
+            if item['投资金额']:
+                total_amount += convert_to_number(item['投资金额'])
+        info_dict['总投资金额'] = convert_from_number(total_amount)
+        return info_dict
 

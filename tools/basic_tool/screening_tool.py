@@ -1,4 +1,4 @@
-from utils.utils import convert_to_number
+from utils.utils import convert_to_number, convert_from_number
 
 
 class ScreeningTool:
@@ -29,9 +29,8 @@ class ScreeningTool:
             }
         }
 
-    def run(self, key_name: str, value: float, info_list) -> list:
-        if '子公司信息' in info_list:
-            info_list = info_list['子公司信息']
+    def run(self, key_name: str, value: float, info_dict: dict) -> dict:
+        info_list = info_dict['子公司信息']
 
         res_list = []
         for info in info_list:
@@ -39,5 +38,12 @@ class ScreeningTool:
                 if convert_to_number(info[key_name]) > value:
                     res_list.append(info)
 
-        return res_list
+        info_dict['子公司数量'] = len(res_list)
+        info_dict['子公司信息'] = []
+        total_amount = 0
+        for item in res_list:
+            if item['投资金额']:
+                total_amount += convert_to_number(item['投资金额'])
+        info_dict['总投资金额'] = convert_from_number(total_amount)
+        return info_dict
 
