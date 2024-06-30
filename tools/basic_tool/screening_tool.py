@@ -1,7 +1,7 @@
 from utils.utils import convert_to_number
 
 
-class GetTopNTool:
+class ScreeningTool:
     def __init__(self):
         self.tool_name = 'screening_tool'
 
