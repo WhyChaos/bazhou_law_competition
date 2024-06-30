@@ -4,7 +4,7 @@ from tools.basic_function.search_company_name import SearchCompanyName
 
 class GetTopNTool:
     def __init__(self):
-        self.tool_name = 'get_top_n_tool'
+        self.tool_name = 'screening_tool'
 
     def get_glm_tool_dict(self) -> dict:
         return {
