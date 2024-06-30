@@ -1,6 +1,6 @@
 from tools.basic_function.get_company_info import GetCompanyInfo
 from tools.basic_function.search_company_name import SearchCompanyName
-from utils.utils import convert_to_number
+from utils.utils import convert_to_number, convert_from_number
 
 
 class GetSubCompanyInfoTool:
@@ -61,6 +61,6 @@ class GetSubCompanyInfoTool:
                 '投资金额': item['上市公司投资金额'],
             })
             total_amount += convert_to_number(item['上市公司投资金额'])
-        info['总投资金额'] = total_amount
+        info['总投资金额'] = convert_from_number(total_amount)
         return info
 
