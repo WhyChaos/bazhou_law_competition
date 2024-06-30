@@ -39,7 +39,7 @@ class ScreeningTool:
                     res_list.append(info)
 
         info_dict['子公司数量'] = len(res_list)
-        info_dict['子公司信息'] = []
+        info_dict['子公司信息'] = res_list
         total_amount = 0
         for item in res_list:
             if item['投资金额']:
