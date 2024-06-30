@@ -26,7 +26,7 @@ class FindBiggestTool:
             }
         }
 
-    def run(self, key_name: str, value: int, info_dict: dict) -> dict:
+    def run(self, key_name: str, info_dict: dict) -> dict:
 
         info_list = info_dict['子公司信息']
         def custom_sort(data):

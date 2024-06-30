@@ -40,7 +40,7 @@ class SubCompanyInfoAgent(BaseAgent):
             while True:
                 tool_choice = self.choose_tool(item)
 
-                if len(call_tool_result) > 0 and call_tool_result[-1] == tool_choice:
+                if tool_choice == 'screening_tool' or tool_choice == 'find_biggest_tool':
                     response = self.answer_without_before(item, tool_choice)
                 else:
                     response = self.answer_with_before(messages, item, tool_choice)
@@ -75,6 +75,16 @@ class SubCompanyInfoAgent(BaseAgent):
                     tool_result.append(function_result)
                     call_tool_result.append(tool_choice)
                     break
+        for idx in range(len(messages)):
+            if idx < len(messages) - 1 and messages[idx]['role'] == 'tool':
+                content = json.loads(messages[idx]['content'])
+                content.pop('子公司信息', None)
+                messages[idx]['content'] = json.dumps(content, ensure_ascii=False)
+        # is_detail = self.judge_call_detail(question)
+        # if is_detail is False:
+        #     content = json.loads(messages[-1]['content'])
+        #     content.pop('子公司信息', None)
+        #     messages[-1]['content'] = json.dumps(content, ensure_ascii=False)
         while True:
             try:
                 messages.append({
@@ -94,6 +104,35 @@ class SubCompanyInfoAgent(BaseAgent):
                 print('retry')
 
         return answer
+
+#     def judge_call_detail(self, query: str):
+#         messages = []
+#         messages.append({
+#             "role": "system",
+#             "content": '''你是一个语义理解的助手，你的任务是问题，判断回答该问题是否需要知道。
+# 如果需要：输出'是',
+# 如果不需要：输出'否'，
+# 不要输出其他内容。
+# '''})
+#         messages.append({
+#             "role": "user",
+#             "content": 'query：' + query + '''
+# 回答我是或否。'''
+# })
+#         while True:
+#             response = self.client.chat.completions.create(
+#                 model=self.model_type,  # 填写需要调用的模型名称
+#                 messages=messages,
+#                 temperature=self.temperature,
+#                 top_p=self.top_p,
+#                 max_tokens=2
+#             )
+#             answer = response.choices[0].message.content
+#             if answer == '是':
+#                 return True
+#             if answer == '否':
+#                 return False
+#             print('子公司详细信息retry')
 
     def answer_with_before(self, messages, item, tool_choice):
         response = self.client.chat.completions.create(
@@ -139,7 +178,7 @@ class SubCompanyInfoAgent(BaseAgent):
 筛选工具：输出'screening_tool'。
 找最大的工具：输出'find_biggest_tool'。
 不要输出其他内容。
-'''.format()
+'''
         })
         messages.append({
             "role": "user",
