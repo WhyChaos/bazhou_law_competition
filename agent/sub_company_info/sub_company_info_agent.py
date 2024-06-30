@@ -51,7 +51,7 @@ class SubCompanyInfoAgent(BaseAgent):
                 tool_call = response.choices[0].message.tool_calls[0]
                 args = tool_call.function.arguments
                 if tool_call.function.name == 'screening_tool' or tool_call.function.name == 'find_biggest_tool':
-                    args_dict = json.loads(args) | {'info_list': tool_result[-1]}
+                    args_dict = json.loads(args) | {'info_dict': tool_result[-1].copy()}
                     function_result = self.tools_handler.call_function(function_name=tool_call.function.name,
                                                                    args_dict=args_dict)
                 else: # 当调用查询公司信息的时候，可以和get_top_n_tool 一样，用确定的消息传递（tool_result）
