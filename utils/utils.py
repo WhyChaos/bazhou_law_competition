@@ -7,7 +7,7 @@ def convert_to_number(amount_str):
     }
 
     # 初始化结果为0
-    number = 1
+    number = 1.0
 
     # 遍历单位
     for unit, multiplier in units.items():

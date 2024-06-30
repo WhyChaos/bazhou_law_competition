@@ -1,5 +1,4 @@
-from tools.basic_function.get_company_info import GetCompanyInfo
-from tools.basic_function.search_company_name import SearchCompanyName
+from utils.utils import convert_to_number
 
 
 class GetTopNTool:
@@ -33,7 +32,7 @@ class GetTopNTool:
     def run(self, key_name: str, value: int, info_list: list) -> list:
         res_list = []
         for info in info_list:
-            if info[key_name] > value:
+            if convert_to_number(info[key_name]) > value:
                 res_list.append(info)
 
         return info_list
