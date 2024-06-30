@@ -43,6 +43,12 @@ class GetCompanyInfo(BaseFunction):
             data = {}
         return data
 
+    def get_mother_company_info(self, sub_company_name: str):
+        data = self.get_sub_company_info(company_name=sub_company_name)
+        if data:
+            return data
+        return '该公司名称不存在，请根据用户输入提取正确的公司名称'
+
     def get_company_sub(self, company_name: str) -> dict:
         data = self.get_sub_company_info(company_name)
         return data

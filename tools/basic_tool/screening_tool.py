@@ -1,0 +1,40 @@
+from tools.basic_function.get_company_info import GetCompanyInfo
+from tools.basic_function.search_company_name import SearchCompanyName
+
+
+class GetTopNTool:
+    def __init__(self):
+        self.tool_name = 'get_top_n_tool'
+
+    def get_glm_tool_dict(self) -> dict:
+        return {
+            "type": "function",
+            "function": {
+                "name": self.tool_name,
+                "description": '筛选工具：根据融资信息的参股比例、投资金额字段进行筛选。',
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "key_name": {
+                            "description": '用于筛选的字段名，参股比例或投资金额',
+                            "type": "str",
+                            "enum": ["参股比例", "投资金额"]
+                        },
+                        "value": {
+                            "description": '筛选条件的阈值',
+                            "type": "float"
+                        }
+                    },
+                    "required": ["key_name", "value"]
+                },
+            }
+        }
+
+    def run(self, key_name: str, value: int, info_list: list) -> list:
+        res_list = []
+        for info in info_list:
+            if info[key_name] > value:
+                res_list.append(info)
+
+        return info_list
+
