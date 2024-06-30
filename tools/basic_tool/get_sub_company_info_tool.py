@@ -60,7 +60,8 @@ class GetSubCompanyInfoTool:
                 '参股比例': item['上市公司参股比例'],
                 '投资金额': item['上市公司投资金额'],
             })
-            total_amount += convert_to_number(item['上市公司投资金额'])
+            if item['上市公司投资金额']:
+                total_amount += convert_to_number(item['上市公司投资金额'])
         info['总投资金额'] = convert_from_number(total_amount)
         return info
 

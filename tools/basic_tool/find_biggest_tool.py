@@ -28,7 +28,9 @@ class FindBiggestTool:
 
     def run(self, key_name: str, value: int, info_list: list) -> list:
         def custom_sort(data):
-            return -convert_to_number(data[key_name])
+            if data[key_name]:
+                return -convert_to_number(data[key_name])
+            return 0
 
         info_list = sorted(info_list, key=custom_sort)
 
