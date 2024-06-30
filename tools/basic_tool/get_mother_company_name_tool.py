@@ -27,7 +27,7 @@ class GetMotherCompanyNameTool:
                     "type": "object",
                     "properties": {
                         "sub_company_name": {
-                            "description": "公司信息的字段名称",
+                            "description": "子公司名称",
                             "type": "str"
                         },
                     },

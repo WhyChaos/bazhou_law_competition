@@ -1,5 +1,6 @@
 from tools.basic_function.get_company_info import GetCompanyInfo
 from tools.basic_function.search_company_name import SearchCompanyName
+from utils.utils import convert_to_number
 
 
 class GetSubCompanyInfoTool:
@@ -51,6 +52,7 @@ class GetSubCompanyInfoTool:
             info['母公司股票简称'] = info_list[0]['关联上市公司股票简称']
         info['子公司数量'] = len(info_list)
         info['子公司信息'] = []
+        total_amount = 0
         for item in info_list:
             info['子公司信息'].append({
                 '子公司名称': item['公司名称'],
@@ -58,5 +60,7 @@ class GetSubCompanyInfoTool:
                 '参股比例': item['上市公司参股比例'],
                 '投资金额': item['上市公司投资金额'],
             })
+            total_amount += convert_to_number(item['上市公司投资金额'])
+        info['总投资金额'] = total_amount
         return info
 
