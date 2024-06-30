@@ -22,22 +22,30 @@ class GetMotherCompanyNameTool:
             "type": "function",
             "function": {
                 "name": self.tool_name,
-                "description": "找母公司的工具：根据子公司名称获得母公司名称和融资信息",
+                "description": "找母公司的工具：根据子公司名称获得母公司名称和融资信息，可传入多个子公司名称。",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "sub_company_name": {
-                            "description": "子公司名称",
-                            "type": "str"
+                        "sub_company_name_list": {
+                            "description": "一个或多个子公司名称，一个列表",
+                            "type": "list"
                         },
                     },
-                    "required": ["sub_company_name"]
+                    "required": ["sub_company_name_list"]
                 },
             }
         }
 
-    def run(self, sub_company_name: str):
-        info = {}
+    def run(self, sub_company_name_list) -> list:
+        if 'Items' in sub_company_name_list:
+            sub_company_name_list = sub_company_name_list['Items']
+        res_list = []
+        for sub_company_name in sub_company_name_list:
+            res_list.append(self.get_mother_company_name_dict(sub_company_name=sub_company_name))
+
+        return res_list
+
+    def get_mother_company_name_dict(self, sub_company_name: str):
         mother_company_name_info = self.get_company_info.get_mother_company_info(sub_company_name=sub_company_name)
         if isinstance(mother_company_name_info, str):
             tmp = self.search_company_name.search_company_name_by_info('公司简称', sub_company_name)
