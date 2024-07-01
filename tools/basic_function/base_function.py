@@ -43,14 +43,14 @@ class BaseFunction(object):
 
             while response.status_code != 200:
                 response = requests.post(url, headers=headers, json=data)
-                print(f'api: {api}, status: {response.status_code}, data: {data}')
+                print(f'api: {api}, status: {response.status_code}, list_a_data: {data}')
                 time.sleep(2)
 
             resp_data = response.json()
             try:
                 self.insert_law_api(api_name=api, data=self.json_dumps(data), resp_data=self.json_dumps(resp_data))
             except Exception as e:
-                print(f'插入失败,api: {api}, error: {e}, data: {data}, resp_data: {resp_data}')
+                print(f'插入失败,api: {api}, error: {e}, list_a_data: {data}, resp_data: {resp_data}')
 
         if isinstance(resp_data, str):
             resp_data = None
@@ -67,9 +67,9 @@ class BaseFunction(object):
             CREATE TABLE IF NOT EXISTS {} (
                 id INTEGER PRIMARY KEY,
                 api_name TEXT NOT NULL,
-                data TEXT NOT NULL,
+                list_a_data TEXT NOT NULL,
                 resp_data TEXT NOT NULL,
-                UNIQUE(api_name, data)
+                UNIQUE(api_name, list_a_data)
             )
         '''.format(self.law_api_table_name))
         # 提交事务
@@ -84,7 +84,7 @@ class BaseFunction(object):
         cur = self.law_conn.cursor()
         # 插入数据
         cur.execute('''
-            INSERT INTO {} (api_name, data, resp_data)
+            INSERT INTO {} (api_name, list_a_data, resp_data)
             VALUES (?, ?, ?)
         '''.format(self.law_api_table_name), (api_name, data, resp_data))
         # 提交事务
@@ -101,7 +101,7 @@ class BaseFunction(object):
         cur.execute('''
             SELECT * FROM {}
             WHERE api_name = ?
-            AND data = ?
+            AND list_a_data = ?
         '''.format(self.law_api_table_name), (api_name, data))
         rows = cur.fetchall()
         # 关闭游标

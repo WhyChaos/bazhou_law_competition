@@ -7,8 +7,8 @@ from datetime import datetime
 class Game:
     def __init__(self):
         self.max_threads = 5
-        self.question_file_path = 'data/one_question.jsonl'
-        self.submission_file_path = f'data/submission_{self.get_current_time_string()}.jsonl'
+        self.question_file_path = 'list_a_data/one_question.jsonl'
+        self.submission_file_path = f'list_a_data/submission_{self.get_current_time_string()}.jsonl'
         self.question_list = self.read_jsonl(self.question_file_path)
 
     # 获取当前时间并格式化

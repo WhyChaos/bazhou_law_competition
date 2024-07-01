@@ -82,10 +82,10 @@ class GetCompanyInfo(BaseFunction):
 
 
     # def get_company_list_info_and_register(self, company_name_list: list) -> dict:
-    #     data = {}
+    #     list_a_data = {}
     #     for company_name in company_name_list:
-    #         data[company_name] = self.get_company_info_and_register(company_name)
-    #     return data
+    #         list_a_data[company_name] = self.get_company_info_and_register(company_name)
+    #     return list_a_data
 
 
 
